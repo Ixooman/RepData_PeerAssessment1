@@ -1,0 +1,55 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+author: "Alexey Tkachev"
+output: 
+  html_document:
+    keep_md: true
+---
+
+
+## Loading and preprocessing the data
+We will use **dplyr** and **ggplot2** packages  
+```{r, echo=FALSE, results='hide'}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+df <- read.csv("activity.csv")
+df$date <- as.Date(df$date)
+```
+
+
+## What is mean total number of steps taken per day?
+At the first step we calculate the total number of steps taken per day and make a histogram of the total number of steps taken each day
+```{r}
+tmp <- summarize(group_by(df, date), s=sum(steps, na.rm = TRUE))
+ggp <- ggplot(tmp, aes(x = date, y = s/1000))
+ggp <- ggp + geom_histogram(fill="gray", color=NA, stat = "identity")
+ggp <- ggp + theme_bw()
+ggp <- ggp + labs(title="Total number of steps taken per day", x="Date", y="Steps (thousands)")
+
+```
+ 
+```{r, echo=FALSE, fig.width=9}
+ggp
+```
+
+Now we calculate the mean and median of the total number of steps taken per day
+```{r}
+steps.mean <- mean(tmp$s)
+steps.median <- median(tmp$s)
+```
+Mean = `r steps.mean`  
+Median = `r steps.median`  
+
+
+## What is the average daily activity pattern?
+
+
+
+## Imputing missing values
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?
