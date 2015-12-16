@@ -8,22 +8,24 @@ output:
 
 
 ## Loading and preprocessing the data
-We will use **dplyr** and **ggplot2** packages  
-```{r, echo=FALSE, results='hide'}
+We will use **dplyr** and **ggplot2** packages.  
+```{r library_loading, echo=FALSE, results='hide'}
 library(dplyr)
 library(ggplot2)
 ```
 
-```{r}
+```{r preprocessing}
 df <- read.csv("activity.csv")
 df$date <- as.Date(df$date)
+df <- tbl_df(df)
 ```
 
 
 ## What is mean total number of steps taken per day?
-At the first step we calculate the total number of steps taken per day and make a histogram of the total number of steps taken each day
-```{r}
+At the first step we calculate the total number of steps taken per day and make a histogram of the total number of steps taken each day.
+```{r steps_per_day}
 tmp <- summarize(group_by(df, date), s=sum(steps, na.rm = TRUE))
+days <- length(tmp$date)
 ggp <- ggplot(tmp, aes(x = date, y = s/1000))
 ggp <- ggp + geom_histogram(fill="gray", color=NA, stat = "identity")
 ggp <- ggp + theme_bw()
@@ -31,25 +33,67 @@ ggp <- ggp + labs(title="Total number of steps taken per day", x="Date", y="Step
 
 ```
  
-```{r, echo=FALSE, fig.width=9}
+```{r steps_per_day_draw, echo=FALSE, fig.width=9}
 ggp
 ```
 
-Now we calculate the mean and median of the total number of steps taken per day
-```{r}
+Now we calculate the mean and median of the total number of steps taken per day.
+```{r mean_median}
 steps.mean <- mean(tmp$s)
 steps.median <- median(tmp$s)
 ```
-Mean = `r steps.mean`  
-Median = `r steps.median`  
+Mean - `r steps.mean`  
+Median - `r steps.median`  
 
 
 ## What is the average daily activity pattern?
+```{r activity_pattern}
+tmp <- summarize(group_by(df, interval), avg=mean(steps, na.rm = TRUE))
+ggp <- ggplot(tmp, aes(x = interval, y = avg))
+ggp <- ggp + geom_line(color="blue")
+ggp <- ggp + theme_bw()
+ggp <- ggp + labs(title="The average daily activity pattern", x="Intervals", y="Steps (average value)")
+```
 
+```{r activity_pattern_draw, echo=FALSE, fig.width=9}
+ggp
+```
 
 
 ## Imputing missing values
+Now we will count the total number of missing values in the original dataset.
+```{r imputing_values_count}
+missing.rows <- is.na(df$steps)
+missing.count <- sum(missing.rows)
+```
+Total number of missing values - `r missing.count`  
 
+For the missing values we will use the median for that 5-minute interval.  
+```{r imputing_values}
+missing.rows <- which(missing.rows)
+tmp <- summarize(group_by(df, interval), med=median(steps, na.rm = TRUE))
+df.imp <- cbind(df, rep(tmp$med, days))
+names(df.imp) <- c(names(df), "med")
+df.imp$steps[missing.rows] <- df.imp$med[missing.rows]
+df.imp <- select(df.imp, -med)
 
+tmp <- summarize(group_by(df.imp, date), s=sum(steps, na.rm = TRUE))
+ggp <- ggplot(tmp, aes(x = date, y = s/1000))
+ggp <- ggp + geom_histogram(fill="gray", color=NA, stat = "identity")
+ggp <- ggp + theme_bw()
+ggp <- ggp + labs(title="Total number of steps taken per day (with imputed values)", x="Date", y="Steps (thousands)")
+```
+
+```{r imputing_values_draw, echo=FALSE, fig.width=9}
+ggp
+```
+
+Now we calculate the mean and median values with imputed data
+```{r mean_median_imp}
+steps.mean.imp <- mean(tmp$s)
+steps.median.imp <- median(tmp$s)
+```
+Mean with imputed data - `r steps.mean.imp`  
+Median with imputed data - `r steps.median.imp` 
 
 ## Are there differences in activity patterns between weekdays and weekends?
