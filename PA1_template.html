@@ -134,7 +134,7 @@ steps.median.imp &lt;- median(tmp$s)</code></pre>
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 <p>At the first step we create a new column with “weekday” and “weekend” values.</p>
 <pre class="r"><code>we &lt;- c('Sunday', 'Saturday')
-days &lt;- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we)+1L])
+days &lt;- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we) + 1L])
 days.palette &lt;- c('blue','red')
 df.imp &lt;- cbind(df.imp, days)</code></pre>
 <p>Next we make a plot of activity patterns in weekdays and weekends.</p>

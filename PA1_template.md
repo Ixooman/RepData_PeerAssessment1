@@ -107,7 +107,7 @@ At the first step we create a new column with "weekday" and "weekend" values.
 
 ```r
 we <- c('Sunday', 'Saturday')
-days <- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we)+1L])
+days <- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we) + 1L])
 days.palette <- c('blue','red')
 df.imp <- cbind(df.imp, days)
 ```

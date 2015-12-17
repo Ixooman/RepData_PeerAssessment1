@@ -16,7 +16,8 @@ days <- length(tmp$date)
 ggp <- ggplot(tmp, aes(x = date, y = s))
 ggp <- ggp + geom_bar(fill="gray", color=NA, stat = "identity")
 ggp <- ggp + theme_bw()
-ggp <- ggp + labs(title="Total number of steps taken per day", x="Date", y="Steps")
+ggp <- ggp + labs(title="Total number of steps taken per day",
+                  x="Date", y="Steps")
 ggp
 
 steps.mean <- mean(tmp$s)
@@ -28,7 +29,8 @@ tmp <- summarize(group_by(df, interval), avg=mean(steps, na.rm = TRUE))
 ggp <- ggplot(tmp, aes(x = interval, y = avg))
 ggp <- ggp + geom_line(color="blue")
 ggp <- ggp + theme_bw()
-ggp <- ggp + labs(title="The average daily activity pattern", x="Intervals", y="Steps (average value)")
+ggp <- ggp + labs(title="The average daily activity pattern",
+                  x="Intervals", y="Steps (average value)")
 ggp
 
 int.max <- tmp$interval[which.max(tmp$avg)]
@@ -48,7 +50,8 @@ tmp <- summarize(group_by(df.imp, date), s=sum(steps, na.rm = TRUE))
 ggp <- ggplot(tmp, aes(x = date, y = s/1000))
 ggp <- ggp + geom_histogram(fill="gray", color=NA, stat = "identity")
 ggp <- ggp + theme_bw()
-ggp <- ggp + labs(title="Total number of steps taken per day (with imputed values)", x="Date", y="Steps (thousands)")
+ggp <- ggp + labs(title="Total number of steps taken per day (with imputed values)",
+                  x="Date", y="Steps (thousands)")
 ggp
 
 steps.mean.imp <- mean(tmp$s)
@@ -56,7 +59,7 @@ steps.median.imp <- median(tmp$s)
 
 # ===== Differences in activity patterns =====
 we <- c('Sunday', 'Saturday')
-days <- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we)+1L])
+days <- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we) + 1L])
 days.palette <- c('blue','red')
 df.imp <- cbind(df.imp, days)
 
@@ -65,7 +68,8 @@ ggp <- ggplot(tmp, aes(x = interval, y = avg, colour = days))
 ggp <- ggp + geom_line()
 ggp <- ggp + scale_colour_manual(values=days.palette) 
 ggp <- ggp + theme_bw()
-ggp <- ggp + labs(title="The average daily activity patterns", x="Intervals", y="Steps (average value)")
+ggp <- ggp + labs(title="The average daily activity patterns",
+                  x="Intervals", y="Steps (average value)")
 ggp <- ggp + facet_wrap( ~ days, nrow = 2, ncol = 1)
 ggp
 
