@@ -28,8 +28,10 @@ tmp <- summarize(group_by(df, interval), avg=mean(steps, na.rm = TRUE))
 ggp <- ggplot(tmp, aes(x = interval, y = avg))
 ggp <- ggp + geom_line(color="blue")
 ggp <- ggp + theme_bw()
-ggp <- ggp + labs(title="The average daily activity pattern", x="Interval", y="Steps (average value)")
+ggp <- ggp + labs(title="The average daily activity pattern", x="Intervals", y="Steps (average value)")
 ggp
+
+int.max <- tmp$interval[which.max(tmp$avg)]
 
 # ===== Imputing missing values =====
 
@@ -53,4 +55,17 @@ steps.mean.imp <- mean(tmp$s)
 steps.median.imp <- median(tmp$s)
 
 # ===== Differences in activity patterns =====
+we <- c('Sunday', 'Saturday')
+days <- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we)+1L])
+days.palette <- c('blue','red')
+df.imp <- cbind(df.imp, days)
+
+tmp <- summarize(group_by(df.imp, days, interval), avg=mean(steps, na.rm = TRUE))
+ggp <- ggplot(tmp, aes(x = interval, y = avg, colour = days))
+ggp <- ggp + geom_line()
+ggp <- ggp + scale_colour_manual(values=days.palette) 
+ggp <- ggp + theme_bw()
+ggp <- ggp + labs(title="The average daily activity patterns", x="Intervals", y="Steps (average value)")
+ggp <- ggp + facet_wrap( ~ days, nrow = 2, ncol = 1)
+ggp
 
