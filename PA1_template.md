@@ -5,17 +5,9 @@ Alexey Tkachev
 ## Loading and preprocessing the data
 We will use **dplyr** and **ggplot2** packages.  
 
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
+```r
+library(dplyr)
+library(ggplot2)
 ```
 
 
@@ -64,7 +56,8 @@ ggp <- ggp + labs(title="The average daily activity pattern",
 
 ![](PA1_template_files/figure-html/activity_pattern_draw-1.png) 
 
-Find a 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps.
+Looking for a 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps.
+
 
 ```r
 int.max <- tmp$interval[which.max(tmp$avg)]
@@ -118,7 +111,9 @@ days <- factor(c('weekday', 'weekend')[(weekdays(df.imp$date) %in% we)+1L])
 days.palette <- c('blue','red')
 df.imp <- cbind(df.imp, days)
 ```
+
 Next we make a plot of activity patterns in weekdays and weekends.
+
 
 ```r
 tmp <- summarize(group_by(df.imp, days, interval), avg=mean(steps, na.rm = TRUE))
