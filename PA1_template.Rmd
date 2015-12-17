@@ -31,7 +31,6 @@ ggp <- ggp + geom_histogram(fill="gray", color=NA, stat = "identity")
 ggp <- ggp + theme_bw()
 ggp <- ggp + labs(title="Total number of steps taken per day",
                   x="Date", y="Number of steps (thousands)")
-
 ```
  
 ```{r steps_per_day_draw, echo=FALSE, fig.width=9}

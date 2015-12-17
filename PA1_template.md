@@ -58,7 +58,6 @@ ggp <- ggp + labs(title="The average daily activity pattern",
 
 Looking for a 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps.
 
-
 ```r
 int.max <- tmp$interval[which.max(tmp$avg)]
 ```

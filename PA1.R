@@ -1,4 +1,4 @@
-# Code for preparation and analysis of the data
+# R Code for the Peer Assessment 1 document
 
 # ===== Loading and preprocessing the data =====
 
